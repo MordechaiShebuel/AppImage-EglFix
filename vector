@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -e
+
+EXTRACT_DIR="$HOME/.cache/vector-appimage"
+APPIMAGE="$HOME/apps/Vector_0.4.4_amd64.AppImage"
+ROOT="$EXTRACT_DIR/squashfs-root"
+
+if [ ! -x "/AppRun" ]; then
+    rm -rf "$ROOT"
+    mkdir -p "$EXTRACT_DIR"
+
+    (
+        cd "$EXTRACT_DIR"
+        "$APPIMAGE" --appimage-extract
+    )
+
+    rm -f "$ROOT/usr/lib/libwayland-"*.so*
+    rm -f "$ROOT/usr/lib/libEGL"*.so*
+    rm -f "$ROOT/usr/lib/libGL"*.so*
+fi
+
+exec "$ROOT/AppRun" "$@"
